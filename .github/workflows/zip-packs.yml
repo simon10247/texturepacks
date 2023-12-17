@@ -12,9 +12,9 @@ jobs:
         mkdir -p dist
         cd src
         for c in */ ; do
-          cd $c
+          cd "$c"
           for d in */ ; do
-            cd $d
+            cd "$d"
             name=${d%*/}
             name=$(echo $name | tr -d ' ')
             zip -r ../../../dist/$name.zip .
