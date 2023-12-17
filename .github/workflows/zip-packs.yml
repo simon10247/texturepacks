@@ -17,7 +17,13 @@ jobs:
             cd "$d"
             name=${d%*/}
             name=$(echo $name | tr -d ' ')
-            zip -r ../../../dist/$name.zip .
+            file="../../../dist/$name.zip"
+            zip -r $file .
+            size=$(wc -c $file | awk '{print $1}')
+            if [ $size -gt 10000000 ]; then
+              echo "File $file is too big ($size bytes), deleting..."
+              rm $file
+            fi
             cd ..
           done
           cd ..
