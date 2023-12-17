@@ -1,0 +1,31 @@
+name: zip-packs
+on: [push]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Zip packs
+      run: |
+        mkdir -p dist
+        cd src
+        for c in */ ; do
+          cd $c
+          for d in */ ; do
+            cd $d
+            name=${d%*/}
+            name=$(echo $name | tr -d ' ')
+            zip -r ../../../dist/$name.zip .
+            cd ..
+          done
+          cd ..
+        done
+    - name: Commit files
+      run: |
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email ""
+        git add .
+        git commit -am "Zipped packs"
+        git push
